@@ -141,8 +141,10 @@ public final class PaymentHandlerImpl implements PaymentHandler {
         BaseManager.Listener listener = new BaseManager.Listener() {
             @Override
             public void onHandled() {
-                mPaymentInitiationResponseEntity.handled = true;
-                mPaymentRepository.updatePaymentInitiationResponseEntity(mPaymentInitiationResponseEntity);
+                if (mPaymentInitiationResponseEntity != null) {
+                    mPaymentInitiationResponseEntity.handled = true;
+                    mPaymentRepository.updatePaymentInitiationResponseEntity(mPaymentInitiationResponseEntity);
+                }
             }
         };
 

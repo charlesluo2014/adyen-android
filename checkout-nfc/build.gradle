@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${rootProject.supportLibVersion}"
+    implementation "com.android.support:support-annotations:28.0.0"
 
     api project(":checkout-core-card")
 }

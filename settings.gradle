@@ -6,5 +6,5 @@ include ':checkout-base',
         ':checkout-threeds',
         ':checkout-ui',
         ':checkout-util',
-        ':checkout-wechatpay',
-        ':example-app'
+        ':checkout-wechatpay'
+        //':example-app'

@@ -63,12 +63,12 @@ public class DatePickerWidget extends android.support.v7.widget.AppCompatTextVie
 
     @Override
     public void onRestoreInstanceState(@NonNull Parcelable state) {
-        if (!(state instanceof DatePickerWidget.SavedState)) {
+        if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
 
-        DatePickerWidget.SavedState savedState = (DatePickerWidget.SavedState) state;
+        SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
 
         if (savedState.mTime != 0L) {
@@ -162,14 +162,14 @@ public class DatePickerWidget extends android.support.v7.widget.AppCompatTextVie
      */
     public static class SavedState extends BaseSavedState {
         @NonNull
-        public static final Parcelable.Creator<DatePickerWidget.SavedState> CREATOR =
-                new Parcelable.Creator<DatePickerWidget.SavedState>() {
-                    public DatePickerWidget.SavedState createFromParcel(Parcel in) {
-                        return new DatePickerWidget.SavedState(in);
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
                     }
 
-                    public DatePickerWidget.SavedState[] newArray(int size) {
-                        return new DatePickerWidget.SavedState[size];
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
                     }
                 };
 

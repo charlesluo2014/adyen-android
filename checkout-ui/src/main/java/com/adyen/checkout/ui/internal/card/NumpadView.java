@@ -77,7 +77,7 @@ public class NumpadView extends LinearLayout {
         void onBackspace();
     }
 
-    private final class CharNotifier implements View.OnClickListener {
+    private final class CharNotifier implements OnClickListener {
         private final char mChar;
 
         private CharNotifier(char charToNotify) {

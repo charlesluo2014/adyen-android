@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 
 public final class EncryptedCard implements Parcelable {
     @NonNull
-    public static final Parcelable.Creator<EncryptedCard> CREATOR = new Parcelable.Creator<EncryptedCard>() {
+    public static final Parcelable.Creator<EncryptedCard> CREATOR = new Creator<EncryptedCard>() {
         @Override
         public EncryptedCard createFromParcel(Parcel source) {
             return new EncryptedCard(source);

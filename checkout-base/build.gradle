@@ -6,7 +6,7 @@ apply from: "$rootProject.rootDir/quality.gradle"
 apply from: "$rootProject.rootDir/release.gradle"
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -24,8 +24,16 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    buildToolsVersion = '28.0.3'
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${rootProject.supportLibVersion}"
+    implementation "com.android.support:support-annotations:28.0.0"
+    implementation "com.android.support:exifinterface:28.0.0"
+    implementation "com.android.support:support-v4:28.0.0"
+
 }

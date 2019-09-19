@@ -111,7 +111,7 @@ public class CustomTextInputLayout extends LinearLayout {
         mHint = typedArray.getString(R.styleable.CustomTextInputLayout_customTextInputLayout_hint);
         typedArray.recycle();
 
-        final LinearLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         mCaptionTextView = new AppCompatTextView(context);
         mCaptionTextView.setMaxLines(1);

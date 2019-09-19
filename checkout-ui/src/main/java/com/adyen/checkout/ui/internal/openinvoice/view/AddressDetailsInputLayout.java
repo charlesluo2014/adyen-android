@@ -342,7 +342,7 @@ public class AddressDetailsInputLayout extends InputDetailsGroupLayout {
 
     @SuppressWarnings("checkstyle:MemberName")
     private static class SavedState extends BaseSavedState {
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }

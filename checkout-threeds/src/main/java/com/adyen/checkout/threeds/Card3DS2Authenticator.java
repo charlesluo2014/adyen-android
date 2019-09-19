@@ -8,7 +8,9 @@
 
 package com.adyen.checkout.threeds;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -74,8 +76,6 @@ public final class Card3DS2Authenticator {
      * @param encodedFingerprintToken The fingerprint token received from the Checkout API.
      * @param listener                {@link FingerprintListener} The fingerprint listener listens to fingerprint creation success or failure.
      */
-    @SuppressWarnings("WeakerAccess")
-    @NonNull
     public void createFingerprint(@NonNull String encodedFingerprintToken, @NonNull FingerprintListener listener) {
         try {
             FingerprintToken fingerprintToken = Base64Coder.decode(encodedFingerprintToken, FingerprintToken.class);
@@ -94,37 +94,50 @@ public final class Card3DS2Authenticator {
      * @param listener                 {@link FingerprintListener} The fingerprint listener listens to fingerprint creation success or failure.
      */
     @SuppressWarnings("WeakerAccess")
-    @NonNull
     public void createFingerprint(
-            @NonNull String directoryServerId,
-            @NonNull String directoryServerPublicKey,
-            @NonNull FingerprintListener listener
+            @NonNull final String directoryServerId,
+            @NonNull final String directoryServerPublicKey,
+            @NonNull final FingerprintListener listener
     ) {
-        ConfigParameters configParameters = new AdyenConfigParameters.Builder(directoryServerId, directoryServerPublicKey).build();
+        final ConfigParameters configParameters = new AdyenConfigParameters.Builder(directoryServerId, directoryServerPublicKey).build();
 
-        try {
-            // TODO: 15/04/2019 make this call async.
-            ThreeDS2Service.INSTANCE.initialize(mActivity, configParameters, null, mUiCustomization);
-        } catch (SDKAlreadyInitializedException e) {
-            // Do nothing.
-        }
+        // This class is not an Activity so it shouldn't cause memory leaks
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    ThreeDS2Service.INSTANCE.initialize(mActivity.getApplicationContext(), configParameters, null, mUiCustomization);
+                } catch (SDKAlreadyInitializedException e) {
+                    // Do nothing.
+                }
+                return null;
+            }
 
-        try {
-            closeTransaction();
-            createTransaction();
-        } catch (SDKNotInitializedException e) {
-            listener.onFailure(ThreeDS2Exception.from("Transaction creation failure, 3DS service isn't initialized.", e));
-        }
+            @Override
+            protected void onPostExecute(Void myVoid) {
+                super.onPostExecute(myVoid);
+                if (!isReleased()) {
+                    try {
+                        closeTransaction();
+                        createTransaction();
+                    } catch (SDKNotInitializedException e) {
+                        listener.onFailure(ThreeDS2Exception.from("Transaction creation failure, 3DS service isn't initialized.", e));
+                    }
 
-        AuthenticationRequestParameters authenticationRequestParameters = mTransaction.getAuthenticationRequestParameters();
-        Fingerprint fingerprint = new Fingerprint(authenticationRequestParameters);
+                    AuthenticationRequestParameters authenticationRequestParameters = mTransaction.getAuthenticationRequestParameters();
+                    Fingerprint fingerprint = new Fingerprint(authenticationRequestParameters);
 
-        try {
-            String encodedFingerprint = Base64Coder.encode(fingerprint);
-            listener.onSuccess(encodedFingerprint);
-        } catch (JSONException e) {
-            listener.onFailure(ThreeDS2Exception.from("Fingerprint encoding failure.", e));
-        }
+                    try {
+                        String encodedFingerprint = Base64Coder.encode(fingerprint);
+                        listener.onSuccess(encodedFingerprint);
+                    } catch (JSONException e) {
+                        listener.onFailure(ThreeDS2Exception.from("Fingerprint encoding failure.", e));
+                    }
+                }
+            }
+        };
+        task.execute();
     }
 
     /**

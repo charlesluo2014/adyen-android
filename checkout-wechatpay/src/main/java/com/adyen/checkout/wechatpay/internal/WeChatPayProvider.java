@@ -34,7 +34,7 @@ public final class WeChatPayProvider {
         }
 
         /**
-         * @param clazz The callback {@link android.app.Activity}, will be launched with a WeChat Pay payment result intent.
+         * @param clazz The callback {@link Activity}, will be launched with a WeChat Pay payment result intent.
          * @return The {@link Builder}
          */
         @NonNull
